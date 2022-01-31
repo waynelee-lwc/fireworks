@@ -50,7 +50,7 @@
 		let curr = date.getFullYear() * 10000 + date.getMonth() * 100 + date.getDate()
 		let targ = 20220100
 		// console.log(curr)
-		if(curr < targ){
+		if(curr >= targ){
 			time.innerText = '虎年快乐！'
 		}else{
 			time.innerText = '距离2022虎年还有:' + getTimeTo2022()
