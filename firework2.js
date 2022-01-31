@@ -25,7 +25,7 @@ var canvas = document.getElementById( 'canvas' ),
 		limiterTotal = 5,
 		limiterTick = 0,
 		// this will time the auto launches of fireworks, one launch per 80 loop ticks
-		timerTotal = 30,
+		timerTotal = 3,
 		timerTick = 0,
 		mousedown = false,
 		// mouse x coordinate,
@@ -142,11 +142,12 @@ function Particle( x, y ) {
 	}
 	// set a random angle in all possible directions, in radians
 	this.angle = random( 0, Math.PI * 2 );
-	this.speed = random( 1, 15 );
+	this.speed = random( 12, 15 );
+	this.speed *= Math.sin(Math.random() * Math.PI - Math.PI / 2)
 	// friction will slow the particle down
 	this.friction = 0.95;
 	// gravity will be applied and pull the particle down
-	this.gravity = 1.05;
+	this.gravity = 1.5;
 	// set the hue to a random number +-20 of the overall hue variable
 	this.hue = random( hue - 20, hue + 20 );
 	this.brightness = random( 50, 80 );
@@ -179,6 +180,7 @@ Particle.prototype.update = function( index ) {
 Particle.prototype.draw = function() {
 	ctx. beginPath();
 	// move to the last tracked coordinates in the set, then draw a line to the current x and y
+	ctx.lineWidth = 3
 	ctx.moveTo( this.coordinates[ this.coordinates.length - 1 ][ 0 ], this.coordinates[ this.coordinates.length - 1 ][ 1 ] );
 	ctx.lineTo( this.x, this.y );
 	ctx.strokeStyle = 'hsla(' + this.hue + ', 100%, ' + this.brightness + '%, ' + this.alpha + ')';
@@ -201,6 +203,9 @@ function loop() {
 	
 	// increase the hue to get different colored fireworks over time
 	hue += 0.5;
+	
+	if(hue >= 30)
+		hue = -10
 	
 	// normally, clearRect() would be used to clear the canvas
 	// we want to create a trailing effect though
@@ -231,7 +236,7 @@ function loop() {
 	if( timerTick >= timerTotal ) {
 		if( !mousedown ) {
 			// start the firework at the bottom middle of the screen, then set the random target coordinates, the random y coordinates will be set within the range of the top half of the screen
-			fireworks.push( new Firework( cw / 2, ch, random( 0, cw ), random( 0, ch / 2 ) ) );
+			fireworks.push( new Firework( random(cw/5,cw/5*4), ch, random( 0, cw ), random( 0, ch / 2 ) ) );
 			timerTick = 0;
 		}
 	} else {
